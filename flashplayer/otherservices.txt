@@ -1,0 +1,13 @@
+
+BBC iPlayer:
+xulrunner application.ini --playerurl=http://www.bbc.co.uk/emp/9player.swf --width=640 --height=395 --flashvars="embedReferer=http://www.bbc.co.uk/iplayer/categories/comedy/tv&embedPageUrl=http://www.bbc.co.uk/iplayer/episode/b00gd0n7/Mock_the_Week_Series_6_Episode_13/&domId=bip-play-emp&config=http://www.bbc.co.uk/emp/iplayer/config.xml&playlist=http://www.bbc.co.uk/iplayer/playlist/b00gd0n7&config_settings_autoPlay=true" --croptop=0 --cropbottom=35
+
+BBC News Live:
+xulrunner application.ini --playerurl=http://news.bbc.co.uk/player/emp/2_8_6928_7030/9player.swf --width=640 --height=395 --flashvars="config=http://news.bbc.co.uk/player/emp/config/default.xml?v11&playlist=http%3A%2F%2Fnews.bbc.co.uk%2Fmedia%2Femp%2F7450000%2F7459600%2F7459669.xml&embedReferer=http://news.bbc.co.uk/&embedPageUrl=/1/hi/uk/7459669.stm&config_settings_autoPlay=true&config_settings_showPopoutButton=true" --croptop=0 --cropbottom=35
+
+BBC One Live:
+xulrunner application.ini --playerurl=http://www.bbc.co.uk/emp/9player.swf --width=640 --height=395 --flashvars="embedReferer=http://www.bbc.co.uk/bbcone/&embedPageUrl=http://www.bbc.co.uk/bbcone/watchlive/&domId=channels_emp_0&playlist=http://www.bbc.co.uk/emp/simulcast/bbc_one_london.xml&config=http://www.bbc.co.uk/emp/simulcast/config_bbc_one_london.xml&config_settings_autoPlay=true&config_settings_suppressCodec=h264" --croptop=0 --cropbottom=35
+
+BBC Two Live:
+xulrunner application.ini --playerurl=http://www.bbc.co.uk/emp/9player.swf --width=640 --height=395 --flashvars="embedReferer=http://www.bbc.co.uk/bbctwo/&embedPageUrl=http://www.bbc.co.uk/bbctwo/watchlive/&domId=channels_emp_0&playlist=http://www.bbc.co.uk/emp/simulcast/bbc_two_england.xml&config=http://www.bbc.co.uk/emp/simulcast/config_bbc_two_england.xml&config_settings_autoPlay=true&config_settings_suppressCodec=h264" --croptop=0 --cropbottom=35
+
