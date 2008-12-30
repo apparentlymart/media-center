@@ -1,0 +1,172 @@
+<html>
+<head>
+<title>Flash Video Player</title>
+<style type="text/css">
+
+html, body {
+	overflow: hidden;
+	background: black;
+}
+
+div#sizer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0px;
+}
+
+div#container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+embed {
+	width: 100%;
+	height: 100%;
+}
+
+</style>
+<script type="text/javascript">
+
+var cropLeftWidescreen = 75;
+var cropRightWidescreen = 75;
+var cropLeftStandard = 155;
+var cropRightStandard = 155;
+
+var cropTop = 0;
+var cropLeft = cropLeftStandard;
+var cropRight = cropRightStandard;
+var cropBottom = 8;
+
+var nativeWidth = 790;
+var nativeHeight = 368;
+
+var lastWindowWidth = null;
+var lastWindowHeight = null;
+
+var crazyZoom = false;
+
+function adjust() {
+	var player = document.getElementById("player");
+	if (! player) return;
+	var container = document.getElementById("container");
+	var sizer = document.getElementById("sizer");
+	if (crazyZoom) player.Zoom(100); // Needed for Hulu
+
+	var windowWidth = sizer.clientWidth;
+	var windowHeight = sizer.clientHeight;
+	var movieNativeWidth = nativeWidth - cropLeft - cropRight;
+	var movieNativeHeight = nativeHeight - cropTop - cropBottom;
+
+	if (windowWidth != lastWindowWidth || windowHeight != lastWindowHeight) {
+
+		// If we end up with zero for some reason, let's just pretend it's
+		// 1 to avoid division by zero.
+		if (windowWidth == 0) windowWidth = 1;
+		if (windowHeight == 0) windowHeight = 1;
+
+		var windowRatio = windowWidth / windowHeight;
+		var movieNativeRatio = movieNativeWidth / movieNativeHeight;
+
+		if (movieNativeRatio < windowRatio) {
+			// Scaling by height
+			
+			var scaleFactor = windowHeight / movieNativeHeight;
+			
+			var containerWidth = nativeWidth * scaleFactor;
+			var containerHeight = nativeHeight * scaleFactor;
+			var containerTop = cropTop * scaleFactor * -1;
+			var containerLeft = (windowWidth / 2) - (containerWidth / 2);
+
+		}
+		else {
+			// Scaling by width
+
+			var scaleFactor = windowWidth / movieNativeWidth;
+			
+			var containerWidth = nativeWidth * scaleFactor;
+			var containerHeight = nativeHeight * scaleFactor;
+			var containerTop = (windowHeight / 2) - (containerHeight / 2);
+			var containerLeft = cropLeft * scaleFactor * -1;
+
+		}
+
+		container.style.width = containerWidth;
+		container.style.height = containerHeight;
+		container.style.top = containerTop+"px";
+		container.style.left = containerLeft+"px";
+		
+		lastWindowWidth = windowWidth;
+		lastWindowHeight = windowHeight;
+	}
+
+}
+
+function play(url, opts) {
+	var container = document.getElementById("container");
+
+	crazyZoom = opts.crazyZoom ? true : false;
+	cropLeftWidescreen = opts.cropLeftWidescreen ? opts.cropLeftWidescreen : 0;
+	cropRightWidescreen = opts.cropRightWidescreen ? opts.cropRightWidescreen : 0;
+	cropLeftStandard = opts.cropLeftStandard ? opts.cropLeftStandard : 0;
+	cropRightStandard = opts.cropRightStandard ? opts.cropRightStandard : 0;
+
+	if (opts.startWidescreen) {
+		cropLeft = cropLeftWidescreen;
+		cropRight = cropRightWidescreen;
+	}
+	else {
+		cropLeft = cropLeftStandard;
+		cropRight = cropRightStandard;
+	}
+
+	cropTop = opts.cropTop ? opts.cropTop : 0;
+	cropBottom = opts.cropBottom ? opts.cropBottom : 0;
+
+	nativeWidth = opts.nativeWidth ? opts.nativeWidth : 640;
+	nativeHeight = opts.nativeHeight ? opts.nativeHeight : 400;
+	
+	var player = document.getElementById("player");
+	if (player) {
+		player.parentElement.removeChild(player);
+	}
+	
+	player = document.createElement("embed");
+	if (opts.flashVars) player.setAttribute("flashvars", opts.flashVars);
+	player.src = url;
+	player.id = "player";
+	container.appendChild(player);
+	adjust();
+}
+
+window.onload = function () {
+	var runIntervals = 0;
+	var interval = null;
+
+	interval = window.setInterval(function () {
+		adjust();
+		if (runIntervals++ > 5) {
+			window.clearInterval(interval);		
+		}
+	}, 1000);
+}
+
+window.onresize = function () {
+	adjust();
+}
+
+
+</script>
+</head>
+<body>
+<div id="sizer"></div>
+<div id="container">
+</div>
+</body>
+</html>
+
+

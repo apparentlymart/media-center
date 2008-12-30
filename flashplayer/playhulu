@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+
+use FindBin;
+use Getopt::Long;
+
+my $widescreen = 0;
+Getopt::Long::GetOptions(
+	"widescreen" => \$widescreen,
+);
+
+my $appini = $FindBin::Bin."/application.ini";
+
+my $input = shift;
+
+if ($input =~ /eid=([a-zA-Z0-9\-_]+)/) {
+	$input = $1;
+}
+elsif ($input =~ m!/embed/([a-zA-Z0-9\-_]+)!) {
+	$input = $1;
+}
+
+my $url = "http://www.hulu.com/player.swf?referrer=none&eid=".$input;
+
+my @args = qw(--width=790 --height=368 --cropleft=155 --cropright=155 --cropleftwide=75 --croprightwide=75 --cropbottom=8 --crazyzoom);
+push @args, "--widescreen" if $widescreen;
+
+my @launch = ("xulrunner", $appini, "--playerurl=".$url, @args);
+
+print join(" ", @launch)."\n";
+system(@launch);
+
+

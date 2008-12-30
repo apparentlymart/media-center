@@ -1,0 +1,50 @@
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window id="main" title="Flash Video Player" width="800" height="360" windowtype="mediacenter" hidechrome="true" fullScreen="true"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<iframe src="resource://flashvideoplayer/player.html" id="browser" flex="1" />
+	<script>
+		window.onload = function () {
+			var cmdLine = window.arguments[0];
+			cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
+			var playerURL = cmdLine.handleFlagWithParam("playerurl", false);
+			var flashVars = cmdLine.handleFlagWithParam("flashvars", false);
+			var nativeWidth = cmdLine.handleFlagWithParam("width", false);
+			var nativeHeight = cmdLine.handleFlagWithParam("height", false);
+			var startWidescreen = cmdLine.handleFlag("widescreen", false) ? true : false;
+			var crazyZoom = cmdLine.handleFlag("crazyzoom", false) ? true : false;
+			var cropTop = cmdLine.handleFlagWithParam("croptop", false);
+			var cropBottom = cmdLine.handleFlagWithParam("cropbottom", false);
+			var cropLeft = cmdLine.handleFlagWithParam("cropleft", false);
+			var cropRight = cmdLine.handleFlagWithParam("cropright", false);
+			var cropLeftWidescreen = cmdLine.handleFlagWithParam("cropleftwide", false);
+			var cropRightWidescreen = cmdLine.handleFlagWithParam("croprightwide", false);
+
+			window.setTimeout( function () {
+				var playerWindow = document.getElementById("browser");
+				playerWindow.contentWindow.play(playerURL, {
+					nativeWidth: nativeWidth,
+					nativeHeight: nativeHeight,
+					cropLeftStandard: cropLeft,
+					cropRightStandard: cropRight,
+					cropLeftWidescreen: cropLeftWidescreen,
+					cropRightWidescreen: cropRightWidescreen,
+					cropBottom: cropBottom,
+					cropTop: cropTop,
+					startWidescreen: startWidescreen,
+					crazyZoom: crazyZoom,
+					flashVars: flashVars
+				})
+			}, 2000);
+		};
+
+		window.setTimeout(function () {
+			window.fullScreen = true;
+		}, 1000);
+	</script>
+
+</window>
+
+
+

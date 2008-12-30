@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+
+use FindBin;
+use Getopt::Long;
+use LWP::UserAgent;
+use HTTP::Request;
+
+my $appini = $FindBin::Bin."/application.ini";
+
+my $input = shift;
+
+
+if ($input =~ m!https?://!) {
+	# Looks like a URL? Let's find the player on this page.
+	my $ua = LWP::UserAgent->new();
+	my $req = HTTP::Request->new(GET => $input);
+	my $res = $ua->request($req);
+	if ($res->is_success) {
+		my $body = $res->content;
+		
+		if ($body =~ m!http://www.viddler.com/player/(\w+)/!) {
+			$input = $1;
+		}
+		else {
+			die "Couldn't find a player URL in $input";
+		}
+	}
+	else {
+		die "Failed to fetch HTML page at $input";
+	}
+}
+
+my $url = "http://www.viddler.com/simple/".$input."/";
+
+my @args = qw(--width=545 --height=327 --croptop=2 --cropbottom=21 --flashvars=autoplay=t);
+
+my @launch = ("xulrunner", $appini, "--playerurl=".$url, @args);
+
+print join(" ", @launch)."\n";
+system(@launch);
+
+
